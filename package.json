@@ -1,0 +1,42 @@
+{
+	"name": "fopus-server",
+	"version": "1.0.0",
+	"description": "Server for photography sphere",
+	"main": "index.js",
+	"type": "module",
+	"scripts": {
+		"dev": "nodemon ./server.js",
+		"start": "node ./server.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Daniil-Tevs/Fopus.git#master"
+	},
+	"keywords": [
+		"photo",
+		"photography",
+		"beauty"
+	],
+	"author": "Tevs Daniil",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/Daniil-Tevs/Fopus/issues"
+	},
+	"homepage": "https://github.com/Daniil-Tevs/Fopus/tree/master#readme",
+	"dependencies": {
+		"@prisma/client": "^5.12.1",
+		"argon2": "^0.40.1",
+		"colors": "^1.4.0",
+		"cors": "^2.8.5",
+		"dotenv": "^16.4.5",
+		"express": "^4.19.2",
+		"express-async-handler": "^1.2.0",
+		"jsonwebtoken": "^9.0.2",
+		"mysql": "^2.18.1",
+		"prisma": "^5.12.1"
+	},
+	"devDependencies": {
+		"morgan": "^1.10.0",
+		"nodemon": "^3.1.0"
+	}
+}

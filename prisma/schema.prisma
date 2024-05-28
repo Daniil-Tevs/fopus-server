@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model feedback {
+  ID          Int         @id @default(autoincrement())
+  TEXT        String      @db.VarChar(1024)
+  ORDER_ID    Int
+  USER_ID     Int
+  photo_order photo_order @relation(fields: [ORDER_ID], references: [ID], onUpdate: Restrict, map: "fk_order_id")
+  people      people      @relation(fields: [USER_ID], references: [ID], onUpdate: Restrict, map: "fk_user_id")
+
+  @@index([ORDER_ID], map: "fk_order_id")
+  @@index([USER_ID], map: "fk_user_id")
+}
+
+model order_status {
+  ID          Int           @id @default(autoincrement())
+  NAME        String        @db.VarChar(1024)
+  photo_order photo_order[]
+}
+
+model people {
+  ID                                        Int           @id @default(autoincrement())
+  SURNAME                                   String        @db.VarChar(512)
+  NAME                                      String        @db.VarChar(512)
+  PARENT_NAME                               String?       @db.VarChar(512)
+  EMAIL                                     String        @unique(map: "EMAIL_UNIQUE") @db.VarChar(45)
+  PASSWORD                                  String        @db.VarChar(128)
+  ROLE_ID                                   Int
+  feedback                                  feedback[]
+  role                                      role          @relation(fields: [ROLE_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "people_ibfk_1")
+  photo_cost                                photo_cost[]
+  photo_order_photo_order_BUYER_IDTopeople  photo_order[] @relation("photo_order_BUYER_IDTopeople")
+  photo_order_photo_order_SELLER_IDTopeople photo_order[] @relation("photo_order_SELLER_IDTopeople")
+
+  @@index([ROLE_ID], map: "ROLE_ID")
+}
+
+model photo {
+  ID            Int           @id @default(autoincrement())
+  NAME          String        @db.VarChar(512)
+  TYPE_PAPER_ID Int
+  PHOTO_SIZE_ID Int
+  IS_ACTIVE     Int           @default(1) @db.TinyInt
+  type_paper    type_paper    @relation(fields: [TYPE_PAPER_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "photo_ibfk_1")
+  photo_size    photo_size    @relation(fields: [PHOTO_SIZE_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "photo_ibfk_2")
+  photo_cost    photo_cost[]
+  photo_order   photo_order[]
+
+  @@index([PHOTO_SIZE_ID], map: "PHOTO_SIZE_ID")
+  @@index([TYPE_PAPER_ID], map: "TYPE_PAPER_ID")
+}
+
+model photo_cost {
+  ID        Int    @id @default(autoincrement())
+  COST      Int
+  PHOTO_ID  Int
+  SELLER_ID Int
+  IS_ACTIVE Int    @default(1) @db.TinyInt
+  photo     photo  @relation(fields: [PHOTO_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "photo_cost_ibfk_1")
+  people    people @relation(fields: [SELLER_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "photo_cost_ibfk_2")
+
+  @@index([PHOTO_ID], map: "PHOTO_ID")
+  @@index([SELLER_ID], map: "SELLER_ID")
+}
+
+model photo_order {
+  ID                                   Int              @id @default(autoincrement())
+  COST                                 Int
+  AMOUNT_PHOTO                         Int
+  DATA_CREATED                         DateTime         @default(dbgenerated("(curdate())")) @db.DateTime(0)
+  DATA_GIVE_PHOTO                      DateTime?        @db.DateTime(0)
+  BUYER_ID                             Int
+  SELLER_ID                            Int
+  PHOTO_ID                             Int
+  TYPE_SPEED_ORDER_ID                  Int
+  STATUS                               Int              @default(1)
+  feedback                             feedback[]
+  people_photo_order_BUYER_IDTopeople  people           @relation("photo_order_BUYER_IDTopeople", fields: [BUYER_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "photo_order_ibfk_1")
+  people_photo_order_SELLER_IDTopeople people           @relation("photo_order_SELLER_IDTopeople", fields: [SELLER_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "photo_order_ibfk_2")
+  photo                                photo            @relation(fields: [PHOTO_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "photo_order_ibfk_3")
+  type_speed_order                     type_speed_order @relation(fields: [TYPE_SPEED_ORDER_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "photo_order_ibfk_4")
+  order_status                         order_status     @relation(fields: [STATUS], references: [ID], onUpdate: Restrict, map: "photo_order_ibfk_5")
+
+  @@index([BUYER_ID], map: "BUYER_ID")
+  @@index([PHOTO_ID], map: "PHOTO_ID")
+  @@index([SELLER_ID], map: "SELLER_ID")
+  @@index([TYPE_SPEED_ORDER_ID], map: "TYPE_SPEED_ORDER_ID")
+  @@index([STATUS], map: "photo_order_ibfk_5_idx")
+}
+
+model photo_size {
+  ID    Int     @id @default(autoincrement())
+  NAME  String  @db.VarChar(512)
+  photo photo[]
+}
+
+model role {
+  ID     Int      @id @default(autoincrement())
+  NAME   String   @db.VarChar(512)
+  people people[]
+}
+
+model type_paper {
+  ID    Int     @id @default(autoincrement())
+  NAME  String  @db.VarChar(512)
+  photo photo[]
+}
+
+model type_speed_order {
+  ID          Int           @id @default(autoincrement())
+  NAME        String        @db.VarChar(512)
+  photo_order photo_order[]
+}

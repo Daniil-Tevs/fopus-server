@@ -11,7 +11,8 @@ export const getAllFeedback = asyncHandler(async (req, res) => {
 		where: {
 			people: {
 				ID: req.user.ID
-			}
+			},
+			IS_ACTIVE: true
 		},
 		include: {
 			photo_order: true,
@@ -38,7 +39,8 @@ export const getFeedback = asyncHandler(async (req, res) => {
 			ID: +req.params.id,
 			people: {
 				ID: req.user.ID
-			}
+			},
+			IS_ACTIVE: true
 		},
 		include: {
 			photo_order: true,
@@ -62,7 +64,6 @@ export const getFeedback = asyncHandler(async (req, res) => {
 export const addFeedback = asyncHandler(async (req, res) => {
 	const { text, orderId } = req.body
 
-	console.log(await prisma.feedback)
 	const feedback = await prisma.feedback.create({
 		data: {
 			TEXT: text,

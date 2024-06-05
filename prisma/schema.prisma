@@ -9,6 +9,7 @@ datasource db {
 
 model feedback {
   ID          Int         @id @default(autoincrement())
+  IS_ACTIVE   Boolean     @default(true)
   TEXT        String      @db.VarChar(1024)
   ORDER_ID    Int
   USER_ID     Int
@@ -21,12 +22,14 @@ model feedback {
 
 model order_status {
   ID          Int           @id @default(autoincrement())
+  IS_ACTIVE   Boolean       @default(true)
   NAME        String        @db.VarChar(1024)
   photo_order photo_order[]
 }
 
 model people {
   ID                                        Int           @id @default(autoincrement())
+  IS_ACTIVE                                 Boolean       @default(true)
   SURNAME                                   String        @db.VarChar(512)
   NAME                                      String        @db.VarChar(512)
   PARENT_NAME                               String?       @db.VarChar(512)
@@ -47,7 +50,7 @@ model photo {
   NAME          String        @db.VarChar(512)
   TYPE_PAPER_ID Int
   PHOTO_SIZE_ID Int
-  IS_ACTIVE     Int           @default(1) @db.TinyInt
+  IS_ACTIVE     Boolean       @default(true)
   type_paper    type_paper    @relation(fields: [TYPE_PAPER_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "photo_ibfk_1")
   photo_size    photo_size    @relation(fields: [PHOTO_SIZE_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "photo_ibfk_2")
   photo_cost    photo_cost[]
@@ -58,13 +61,13 @@ model photo {
 }
 
 model photo_cost {
-  ID        Int    @id @default(autoincrement())
+  ID        Int     @id @default(autoincrement())
   COST      Int
   PHOTO_ID  Int
   SELLER_ID Int
-  IS_ACTIVE Int    @default(1) @db.TinyInt
-  photo     photo  @relation(fields: [PHOTO_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "photo_cost_ibfk_1")
-  people    people @relation(fields: [SELLER_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "photo_cost_ibfk_2")
+  IS_ACTIVE Boolean @default(true)
+  photo     photo   @relation(fields: [PHOTO_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "photo_cost_ibfk_1")
+  people    people  @relation(fields: [SELLER_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "photo_cost_ibfk_2")
 
   @@index([PHOTO_ID], map: "PHOTO_ID")
   @@index([SELLER_ID], map: "SELLER_ID")
@@ -72,6 +75,7 @@ model photo_cost {
 
 model photo_order {
   ID                                   Int              @id @default(autoincrement())
+  IS_ACTIVE                            Boolean          @default(true)
   COST                                 Int
   AMOUNT_PHOTO                         Int
   DATA_CREATED                         DateTime         @default(dbgenerated("(curdate())")) @db.DateTime(0)
@@ -96,25 +100,29 @@ model photo_order {
 }
 
 model photo_size {
-  ID    Int     @id @default(autoincrement())
-  NAME  String  @db.VarChar(512)
-  photo photo[]
+  ID        Int     @id @default(autoincrement())
+  IS_ACTIVE Boolean @default(true)
+  NAME      String  @db.VarChar(512)
+  photo     photo[]
 }
 
 model role {
-  ID     Int      @id @default(autoincrement())
-  NAME   String   @db.VarChar(512)
-  people people[]
+  ID        Int      @id @default(autoincrement())
+  IS_ACTIVE Boolean  @default(true)
+  NAME      String   @db.VarChar(512)
+  people    people[]
 }
 
 model type_paper {
-  ID    Int     @id @default(autoincrement())
-  NAME  String  @db.VarChar(512)
-  photo photo[]
+  ID        Int     @id @default(autoincrement())
+  IS_ACTIVE Boolean @default(true)
+  NAME      String  @db.VarChar(512)
+  photo     photo[]
 }
 
 model type_speed_order {
   ID          Int           @id @default(autoincrement())
+  IS_ACTIVE   Boolean       @default(true)
   NAME        String        @db.VarChar(512)
   photo_order photo_order[]
 }

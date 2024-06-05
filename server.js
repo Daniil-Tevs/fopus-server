@@ -3,6 +3,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import express from 'express'
 import morgan from 'morgan'
+import adminRoute from './app/admin/admin.routes.js'
 import authRoute from './app/auth/auth.routes.js'
 import feedbackRoute from './app/feedback/feedback.routes.js'
 import goodRoute from './app/good/good.routes.js'
@@ -29,6 +30,7 @@ async function main() {
 	app.use('/api/feedback', feedbackRoute)
 	app.use('/api/photo', photoRoute)
 	app.use('/api/user', userRoute)
+	app.use('/api/admin', adminRoute)
 
 	app.use(notFound, errorHandler)
 

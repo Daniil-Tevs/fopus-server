@@ -9,7 +9,8 @@ export const getAllTypePaper = asyncHandler(async (req, res) => {
 	const typePaperAll = await prisma.type_paper.findMany({
 		orderBy: {
 			NAME: 'desc'
-		}
+		},
+		where: { IS_ACTIVE: true }
 	})
 	if (!typePaperAll) {
 		res.status(404)
@@ -26,7 +27,8 @@ export const getTypePaper = asyncHandler(async (req, res) => {
 	const id = +req.params.id
 	const typePaper = await prisma.type_paper.findUnique({
 		where: {
-			ID: id
+			ID: id,
+			IS_ACTIVE: true
 		}
 	})
 	if (!typePaper) {

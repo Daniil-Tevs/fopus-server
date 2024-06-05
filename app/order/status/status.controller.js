@@ -9,7 +9,8 @@ export const getAllStatus = asyncHandler(async (req, res) => {
 	const statusAll = await prisma.order_status.findMany({
 		orderBy: {
 			NAME: 'asc'
-		}
+		},
+		where: { IS_ACTIVE: true }
 	})
 	if (!statusAll) {
 		res.status(404)
@@ -26,7 +27,8 @@ export const getStatus = asyncHandler(async (req, res) => {
 	const id = +req.params.id
 	const status = await prisma.order_status.findUnique({
 		where: {
-			ID: id
+			ID: id,
+			IS_ACTIVE: true
 		}
 	})
 	if (!status) {

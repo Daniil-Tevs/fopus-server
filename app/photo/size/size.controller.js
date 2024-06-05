@@ -9,7 +9,8 @@ export const getAllSize = asyncHandler(async (req, res) => {
 	const sizeAll = await prisma.photo_size.findMany({
 		orderBy: {
 			NAME: 'desc'
-		}
+		},
+		where: { IS_ACTIVE: true }
 	})
 	if (!sizeAll) {
 		res.status(404)
@@ -26,7 +27,8 @@ export const getSize = asyncHandler(async (req, res) => {
 	const id = +req.params.id
 	const size = await prisma.photo_size.findUnique({
 		where: {
-			ID: id
+			ID: id,
+			IS_ACTIVE: true
 		}
 	})
 	if (!size) {

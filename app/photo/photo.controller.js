@@ -14,6 +14,10 @@ export const getAllPhoto = asyncHandler(async (req, res) => {
 		include: {
 			type_paper: true,
 			photo_size: true
+		},
+
+		where: {
+			IS_ACTIVE: true
 		}
 	})
 	if (!photoAll) {
@@ -31,7 +35,8 @@ export const getPhoto = asyncHandler(async (req, res) => {
 	const id = +req.params.id
 	const photo = await prisma.photo.findUnique({
 		where: {
-			ID: id
+			ID: id,
+			IS_ACTIVE: true
 		},
 		include: {
 			type_paper: true,

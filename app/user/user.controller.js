@@ -15,7 +15,7 @@ export const getProfile = asyncHandler(async (req, res) => {
 // @access Private
 
 export const getUserList = asyncHandler(async (req, res) => {
-	const filters = {}
+	const filters = { IS_ACTIVE: true }
 	const filtersSource = req.body.filters
 
 	if (filtersSource) {
@@ -46,7 +46,8 @@ export const getSellerList = asyncHandler(async (req, res) => {
 			NAME: 'asc'
 		},
 		where: {
-			ROLE_ID: 2
+			ROLE_ID: 2,
+			IS_ACTIVE: true
 		},
 		select: UserFields
 	})

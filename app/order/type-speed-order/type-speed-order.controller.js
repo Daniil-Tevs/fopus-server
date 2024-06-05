@@ -9,7 +9,8 @@ export const getAllTypeOrderSpeed = asyncHandler(async (req, res) => {
 	const typeOrderSpeedAll = await prisma.type_speed_order.findMany({
 		orderBy: {
 			NAME: 'asc'
-		}
+		},
+		where: { IS_ACTIVE: true }
 	})
 	if (!typeOrderSpeedAll) {
 		res.status(404)
@@ -26,7 +27,8 @@ export const getTypeOrderSpeed = asyncHandler(async (req, res) => {
 	const id = +req.params.id
 	const typeSpeedOrder = await prisma.type_speed_order.findUnique({
 		where: {
-			ID: id
+			ID: id,
+			IS_ACTIVE: true
 		}
 	})
 	if (!typeSpeedOrder) {

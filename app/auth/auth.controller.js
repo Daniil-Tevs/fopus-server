@@ -13,20 +13,21 @@ export const authUser = asyncHandler(async (req, res) => {
 
 	const user = await prisma.people.findUnique({
 		where: {
-			EMAIL: email
+			EMAIL: email,
+			IS_ACTIVE: true
 		}
 	})
 
 	if (!user) {
 		res.status(401)
-		throw new Error('Email is not correct')
+		throw new Error(`Пользователь ${email} не зарегистрирован`)
 	}
 
 	const isValidPassword = await verify(user.PASSWORD, password)
 
 	if (!isValidPassword) {
 		res.status(401)
-		throw new Error('Password is not correct')
+		throw new Error('Неправильный пароль')
 	}
 
 	res.json({ user, token: generateToken(user.ID) })
@@ -41,7 +42,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 
 	if (+roleId === 1) {
 		res.status(401)
-		throw new Error('Not permitted to register')
+		throw new Error('Запрещено')
 	}
 
 	const isUserExists = await prisma.people.findUnique({
@@ -52,7 +53,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 
 	if (isUserExists) {
 		res.status(401)
-		throw new Error('Exist user with such email')
+		throw new Error('Пользователь с данным email уже существует')
 	}
 
 	const user = await prisma.people.create({

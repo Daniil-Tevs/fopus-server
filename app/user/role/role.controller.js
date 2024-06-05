@@ -9,7 +9,8 @@ export const getAllRole = asyncHandler(async (req, res) => {
 	const roleAll = await prisma.role.findMany({
 		orderBy: {
 			NAME: 'asc'
-		}
+		},
+		where: { IS_ACTIVE: true }
 	})
 	if (!roleAll) {
 		res.status(404)
@@ -26,7 +27,8 @@ export const getRole = asyncHandler(async (req, res) => {
 	const id = +req.params.id
 	const role = await prisma.role.findUnique({
 		where: {
-			ID: id
+			ID: id,
+			IS_ACTIVE: true
 		}
 	})
 	if (!role) {

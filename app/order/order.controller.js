@@ -8,7 +8,10 @@ import { UserFields, switchOrderConditional } from '../utils/user.utils.js'
 
 export const getAllOrder = asyncHandler(async (req, res) => {
 	const orders = await prisma.photo_order.findMany({
-		where: { ...switchOrderConditional(+req.user.ROLE_ID, +req.user.ID) },
+		where: {
+			...switchOrderConditional(+req.user.ROLE_ID, +req.user.ID),
+			IS_ACTIVE: true
+		},
 		include: {
 			order_status: true,
 			photo: true,
@@ -37,7 +40,8 @@ export const getOrder = asyncHandler(async (req, res) => {
 	const order = await prisma.photo_order.findMany({
 		where: {
 			ID: +req.params.id,
-			...switchOrderConditional(+req.user.ID)
+			...switchOrderConditional(+req.user.ID),
+			IS_ACTIVE: true
 		},
 		include: {
 			order_status: true,

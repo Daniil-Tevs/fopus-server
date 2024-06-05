@@ -11,7 +11,8 @@ export const getGoods = asyncHandler(async (req, res) => {
 		where: {
 			people: {
 				ID: +req.user.ID
-			}
+			},
+			IS_ACTIVE: true
 		},
 		include: {
 			photo: {
@@ -39,7 +40,7 @@ export const getGoods = asyncHandler(async (req, res) => {
 
 export const getAllGoods = asyncHandler(async (req, res) => {
 	const filters = {
-		IS_ACTIVE: 1
+		IS_ACTIVE: true
 	}
 	let filtersSource = req.body.filters
 
@@ -92,7 +93,8 @@ export const getGood = asyncHandler(async (req, res) => {
 			ID: +req.params.id,
 			people: {
 				ID: +req.user.ID
-			}
+			},
+			IS_ACTIVE: true
 		},
 		include: {
 			photo: {

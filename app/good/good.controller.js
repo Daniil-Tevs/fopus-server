@@ -195,7 +195,7 @@ export const deleteGood = asyncHandler(async (req, res) => {
 			}
 		},
 		data: {
-			IS_ACTIVE: 0
+			IS_ACTIVE: false
 		},
 		include: {
 			photo: true,
